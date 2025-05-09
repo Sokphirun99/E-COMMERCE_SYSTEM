@@ -6,6 +6,9 @@
 #include <ctime>
 using namespace std;
 
+// Add this forward declaration before the accounts vector
+string getCurrentDateTime();
+
 struct Account {
     string username;
     string password;
@@ -19,8 +22,8 @@ struct Account {
 };
 
 vector<Account> accounts = {
-    {"admin", "admin123", "admin", "Admin User", "admin@example.com", "1234567890", "Admin Address", "2023-01-01", {}},
-    {"user", "user123", "user", "Regular User", "user@example.com", "0987654321", "User Address", "2023-01-01", {}}
+    {"admin", "admin123", "admin", "Admin User", "admin@example.com", "1234567890", "Admin Address", getCurrentDateTime(), {}},
+    {"user", "user123", "user", "Regular User", "user@example.com", "0987654321", "User Address", getCurrentDateTime(), {}}
 };
 
 string currentUserRole;
@@ -995,3 +998,4 @@ void loadData() {
     file.close();
     cout << "Data loaded from products.txt successfully.\n";
 }
+
