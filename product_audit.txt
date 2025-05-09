@@ -1,0 +1,1 @@
+2025-05-10 00:24:58 - admin created product ID: 1, Name: ipad, Price: $500, Quantity: 5
