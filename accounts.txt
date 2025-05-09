@@ -1,3 +1,0 @@
-admin,admin123,admin,Admin User,admin@example.com,1234567890,Admin Address,2023-01-01,
-user,user123,user,Regular User,user@example.com,0987654321,User Address,2023-01-01,
-phirun,1234,user,sok phirun,phirun@gmail.com,012550017,1E0, 2009,2025-05-10 00:26:13,
