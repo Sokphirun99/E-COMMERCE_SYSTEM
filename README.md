@@ -3,15 +3,19 @@
 A comprehensive console-based e-commerce application with dual interfaces for administrators and customers. This system implements product management, shopping cart functionality, user authentication, and purchase tracking.
 
 ## Table of Contents
-- [How to Compile and Run](#how-to-compile-and-run)
-- [System Features](#system-features)
-- [User Guide](#user-guide)
-  - [Customer Interface](#customer-interface)
-  - [Administrator Interface](#administrator-interface)
-- [Technical Implementation](#technical-implementation)
-  - [Data Structures](#data-structures)
-  - [File Management](#file-management)
-  - [Core Functions](#core-functions)
+- How to Compile and Run
+- System Features
+- User Guide
+  - Customer Interface
+  - Administrator Interface
+- Technical Implementation
+  - Data Structures
+  - File Management
+  - Core Functions
+- System Flowchart
+- Advanced Technical Implementation
+- Challenges & Experiences
+- References & Screenshots
 
 ## How to Compile and Run
 
@@ -45,17 +49,20 @@ ls -la ecommerce
 - Complete CRUD operations (admin only)
 - Detailed audit trail tracking product changes
 - Product browsing for all users
+- Inventory quantity tracking
 
 ### Shopping Experience
 - Add products to shopping cart
 - Manage cart items and quantities
 - Checkout process with invoice generation
 - Persistent purchase history
+- Stock validation during checkout
 
 ### User Management
 - Profile viewing and management
 - Order history tracking
 - Admin access to all user accounts
+- Real-time join dates for new users
 
 ## User Guide
 
@@ -70,6 +77,7 @@ When logged in as a regular user, you'll have access to these options:
 
 1. **Browse & Buy Products**
    - View all available products with ID, name, and price
+   - See current stock quantity for each product
    - Add products to your cart with specified quantities
    - Products remain in cart until checkout or logout
 
@@ -83,6 +91,7 @@ When logged in as a regular user, you'll have access to these options:
    - Generate invoice (saved to `invoice.txt`)
    - Record purchase in history
    - Clear cart after successful checkout
+   - Automatically update product inventory
 
 4. **View Purchase History**
    - See all past purchases
@@ -104,11 +113,11 @@ When logged in as a regular user, you'll have access to these options:
 When logged in as an administrator, you'll have access to additional management features:
 
 1. **Product Management (CRUD)**
-   - **Add New Products**: Create products with unique IDs, names, and prices
+   - **Add New Products**: Create products with unique IDs, names, prices, and quantities
    - **View All Products**: See complete catalog with audit details
-   - **Update Products**: Modify names and prices of existing products
+   - **Update Products**: Modify names, prices, and stock quantities of existing products
    - **Delete Products**: Remove products from the system
-   - **View Audit Trail**: See who created, modified, or deleted products
+   - **View Audit Trail**: See who created, modified, or deleted products with timestamps
 
 2. **Browse Products**
    - View the customer-facing product catalog
@@ -119,7 +128,10 @@ When logged in as an administrator, you'll have access to additional management 
    - See orders across all users
 
 4. **Generate Reports**
-   - System-wide analytics (placeholder for future implementation)
+   - Sales Report: Export detailed sales data to CSV
+   - Inventory Report: Generate product stock and valuation in CSV
+   - User Activity Report: Analyze user engagement in CSV format
+   - All reports include timestamps and can be opened in Excel
 
 5. **View All Users**
    - See complete user list
@@ -164,11 +176,12 @@ struct Product {
     int id;
     string name;
     double price;
+    int quantity;  // Stock quantity
     // Audit fields
     string createdBy;
-    string createdDate;
+    string createdDateTime;
     string modifiedBy;
-    string modifiedDate;
+    string modifiedDateTime;
 };
 ```
 
@@ -180,82 +193,35 @@ struct CartItem {
 };
 ```
 
-### File Management
+#### Data Types Used and Rationale:
 
-The system uses several files for data persistence:
+1. **std::string**
+   - Used for storing text data like names, usernames, passwords, and dates
+   - Chosen for its dynamic sizing and built-in string manipulation capabilities
+   - More convenient than character arrays for variable-length text
 
-1. **accounts.txt**
-   - Stores user credentials and profile information
-   - Comma-separated values format
-   - Includes order history with pipe separators
+2. **int**
+   - Used for product IDs and cart quantities
+   - Provides sufficient range for identifiers and counts
+   - Efficient for numerical operations and comparisons
 
-2. **products.txt**
-   - Stores product catalog
-   - Includes audit information (who created/modified and when)
-   - Comma-separated values format
+3. **double**
+   - Used for product prices
+   - Allows decimal points for precise monetary values
+   - Chosen over float for higher precision in financial calculations
 
-3. **invoice.txt**
-   - Generated at checkout
-   - Contains details of the most recent purchase
+4. **std::vector<T>**
+   - Used for dynamic collections (products, cart items, accounts, order history)
+   - Provides automatic memory management and dynamic resizing
+   - Offers efficient random access and iteration
+   - Simplifies collection management compared to raw arrays
 
-4. **history.txt**
-   - Appended with each purchase
-   - Contains all historical orders
+5. **struct**
+   - Used to create custom composite data types
+   - Groups related data fields together for better organization
+   - Provides logical encapsulation of entity attributes
+   - Makes code more readable and maintainable by treating related data as a unit
 
-5. **product_audit.txt**
-   - Detailed log of all product changes
-   - Records creations, updates, and deletions
-
-### Core Functions
-
-1. **User Authentication**
-   - `registerUser()`: Creates new user accounts with profile information
-   - `login()`: Authenticates users and sets current role
-   - `loadAccounts()` & `saveAccounts()`: Manage user data persistence
-
-2. **Product Management**
-   - `productManagement()`: Main interface for CRUD operations
-   - `saveData()` & `loadData()`: Handle product data persistence
-   - Detailed audit trail tracking who created/modified products and when
-
-3. **Shopping Experience**
-   - `browseAndBuy()`: View products and add to cart
-   - `viewCart()`: See current cart contents
-   - `removeFromCart()`: Delete items from cart
-   - `checkout()`: Complete purchase and generate invoice
-
-4. **Profile & History**
-   - `viewUserProfile()`: See account information
-   - `viewPurchaseHistory()`: Access order history
-   - `viewAllUsers()`: Admin function to see all accounts
-
-5. **Utility Functions**
-   - `getCurrentDate()`: Get formatted current date for records
-   - Various menu handling and navigation functions
-
-### Program Flow
-
-1. Program starts and loads account information
-2. User must log in or register
-3. After successful authentication, the appropriate interface is shown
-4. User performs operations based on their role
-5. On logout, the program returns to the login screen
-6. On exit, data is saved to files
-
-## Development Notes
-
-- The system uses vectors as dynamic arrays for flexible storage
-- CSV and pipe-delimited formats for data persistence
-- Role-based access control for security
-- Full audit trail for accountability
-- Error handling for invalid inputs
-- Data is loaded at login and saved at critical points
-
-File IO How many files? What are they? Structure of each file?
-
-I'll update your README.md's File Management section to provide more detailed information about the file structures:
-
-```markdown
 ### File Management
 
 The system uses five distinct files for data persistence, each with a specific structure and purpose:
@@ -269,8 +235,8 @@ username,password,role,fullName,email,phone,address,joinDate,orderHistory
 ```
 **Example**:
 ```
-admin,admin123,admin,Admin User,admin@example.com,1234567890,Admin Address,2023-01-01,
-user,user123,user,Regular User,user@example.com,0987654321,User Address,2023-01-01,Order date: 2023-05-10 - Items: Laptop x1, Total: $999.00|Order date: 2023-05-15 - Items: Headphones x1, Total: $89.99
+admin,admin123,admin,Admin User,admin@example.com,1234567890,Admin Address,2025-05-10 12:34:56,
+user,user123,user,Regular User,user@example.com,0987654321,User Address,2025-05-10 12:35:22,Order date: 2025-05-10 - Items: Laptop x1, Total: $999.00|Order date: 2025-05-15 - Items: Headphones x1, Total: $89.99
 ```
 **Note**: Order history is stored as pipe-separated (|) entries within the last field.
 
@@ -279,13 +245,13 @@ user,user123,user,Regular User,user@example.com,0987654321,User Address,2023-01-
 **Format**: Comma-separated values (CSV) file.
 **Structure**:
 ```
-id,name,price,createdBy,createdDate,modifiedBy,modifiedDate
+id,name,price,quantity,createdBy,createdDateTime,modifiedBy,modifiedDateTime
 ```
 **Example**:
 ```
-1,Laptop,999.99,admin,2023-01-01,admin,2023-03-15
-2,Headphones,89.99,user,2023-02-10,admin,2023-02-10
-3,Keyboard,49.99,admin,2023-03-20,admin,2023-03-20
+1,Laptop,999.99,10,admin,2025-05-10 12:36:45,admin,2025-05-10 14:15:22
+2,Headphones,89.99,25,user,2025-05-10 12:37:10,admin,2025-05-10 12:37:10
+3,Keyboard,49.99,15,admin,2025-05-10 12:38:20,admin,2025-05-10 12:38:20
 ```
 
 #### 3. invoice.txt
@@ -295,6 +261,7 @@ id,name,price,createdBy,createdDate,modifiedBy,modifiedDate
 ```
 --- INVOICE ---
 Date: [date]
+Customer: [username]
 [product name] x[quantity] = $[subtotal]
 [product name] x[quantity] = $[subtotal]
 ...
@@ -303,7 +270,8 @@ Total Amount: $[total]
 **Example**:
 ```
 --- INVOICE ---
-Date: 2023-05-15
+Date: 2025-05-15 15:44:22
+Customer: user
 Laptop x1 = $999.99
 Headphones x2 = $179.98
 Total Amount: $1179.97
@@ -328,13 +296,13 @@ Total: $[total]
 **Example**:
 ```
 --- New Purchase ---
-Date: 2023-05-10
+Date: 2025-05-10 16:45:12
 User: user
 Laptop x1
 Total: $999.99
 
 --- New Purchase ---
-Date: 2023-05-15
+Date: 2025-05-15 15:44:22
 User: user
 Headphones x2
 Total: $179.98
@@ -345,17 +313,17 @@ Total: $179.98
 **Format**: Human-readable text file with one entry per line.
 **Structure**:
 ```
-[date] - [username] [action] product ID: [id], Name: [name], Price: $[price]
+[dateTime] - [username] [action] product ID: [id], Name: [name], Price: $[price], Quantity: [quantity]
 ```
 For updates:
 ```
-[date] - [username] updated product ID: [id], Name: [old name] -> [new name], Price: $[old price] -> $[new price]
+[dateTime] - [username] updated product ID: [id], Name: [old name] -> [new name], Price: $[old price] -> $[new price], Quantity: [old quantity] -> [new quantity]
 ```
 **Example**:
 ```
-2023-05-01 - admin created product ID: 4, Name: Mouse, Price: $19.99
-2023-05-05 - admin updated product ID: 1, Name: Laptop -> Gaming Laptop, Price: $999.99 -> $1499.99
-2023-05-10 - admin deleted product ID: 3, Name: Keyboard, Price: $49.99
+2025-05-10 00:55:27 - admin created product ID: 1, Name: ipad, Price: $500, Quantity: 10
+2025-05-10 00:56:13 - admin created product ID: 2, Name: iphone 16e, Price: $1200, Quantity: 15
+2025-05-10 15:42:37 - admin updated product ID: 1, Name: ipad -> iPad Pro, Price: $500 -> $899, Quantity: 10 -> 5
 ```
 
 ### File I/O Operations
@@ -380,14 +348,44 @@ The system performs the following file operations:
    - File existence checks before reading
    - Graceful handling of missing files with default values
    - Transaction safety by saving data immediately after critical operations
-```
+   - Try-catch blocks to handle data conversion issues
 
+### Core Functions
 
-Creating a flowchart diagram would help demonstrate the overall workflow of your e-commerce system. I can describe how you would create this flowchart, and I'll outline the key elements it should include:
+1. **User Authentication**
+   - `registerUser()`: Creates new user accounts with profile information
+   - `login()`: Authenticates users and sets current role
+   - `loadAccounts()` & `saveAccounts()`: Manage user data persistence
 
-# E-Commerce System Flowchart
+2. **Product Management**
+   - `productManagement()`: Main interface for CRUD operations
+   - `saveData()` & `loadData()`: Handle product data persistence
+   - Detailed audit trail tracking who created/modified products and when
 
-Here's a textual description of the flowchart for your e-commerce system:
+3. **Shopping Experience**
+   - `browseAndBuy()`: View products and add to cart with stock validation
+   - `viewCart()`: See current cart contents
+   - `removeFromCart()`: Delete items from cart
+   - `checkout()`: Complete purchase, update inventory, and generate invoice
+
+4. **Profile & History**
+   - `viewUserProfile()`: See account information
+   - `viewPurchaseHistory()`: Access order history
+   - `viewAllUsers()`: Admin function to see all accounts
+
+5. **Reporting System**
+   - `generateReports()`: Creates Excel-compatible CSV files with timestamps
+   - Sales reports with transaction details
+   - Inventory reports with stock levels and valuation
+   - User activity reports with order statistics
+
+6. **Utility Functions**
+   - `getCurrentDateTime()`: Get formatted current date/time for records
+   - Various menu handling and navigation functions
+
+## System Flowchart
+
+### Main Program Flow
 
 ```
 ┌─────────────────┐
@@ -406,768 +404,165 @@ Here's a textual description of the flowchart for your e-commerce system:
 └─────────┬───────────┘    │
           │                │
           ▼                │
-    ┌─────────────┐        │
-    │User Choice? │        │
-    └──┬───┬──┬───┘        │
-       │   │  │            │
-       ▼   │  │            │
-┌──────────┐ │  │          │
-│  Login   │ │  │          │
-└────┬─────┘ │  │          │
-     │       │  │          │
-     ▼       │  │          │
-┌──────────┐ │  │          │
-│Valid Login│ │  │          │
-│   Check  │ │  │          │
-└──┬────┬──┘ │  │          │
-   │    │    │  │          │
-   │    ▼    ▼  ▼          │
-   │ ┌───────────────┐     │
-   │ │    Return     │     │
-   │ │  to Login     │─────┘
-   │ └───────────────┘
-   │
-   ▼
-┌──────────────┐
-│  Load Data   │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────────┐
-│ Role-based Menu  │
-└────┬──────┬──────┘
-     │      │
-     ▼      ▼
-┌──────────┐ ┌──────────┐
-│   Admin  │ │   User   │
-│   Menu   │ │   Menu   │
-└─────┬────┘ └────┬─────┘
-      │           │
-      ▼           ▼
-┌─────────────────────────┐
-│  Process Menu Selection │
-└───┬─────────────────┬───┘
-    │                 │
-    ▼                 ▼
-┌───────────┐  ┌────────────┐
-│  Logout?  │  │   Exit?    │
-└───┬───┬───┘  └────┬───┬───┘
-    │   │           │   │
-    │   │ No        │   │ No
-    │   └──────┐    │   └───────┐
-    │ Yes      │    │ Yes       │
-    ▼          │    ▼           │
-┌───────────┐  │ ┌────────────┐ │
-│ Clear User│  │ │ Save Data  │ │
-│   State   │  │ └─────┬──────┘ │
-└─────┬─────┘  │       │        │
-      │        │       ▼        │
-      │        │ ┌────────────┐ │
-      │        │ │    End     │ │
-      │        │ │  Program   │ │
-      │        │ └────────────┘ │
-      │        │                │
-      └────────┘                │
-                                │
-                                │
-┌──────────────┐                │
-│ Admin Tasks  │◄───────────────┘
-├──────────────┤
-│1. Product    │
-│   Management │
-│2. Browse     │
-│3. View Orders│
-│4. Reports    │
-│5. Users      │
-│6. Save Data  │
-│7. Load Data  │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│  User Tasks  │
-├──────────────┤
-│1. Browse/Buy │
-│2. View Cart  │
-│3. Checkout   │
-│4. History    │
-│5. Profile    │
-└──────────────┘
+┌──────────────────────┐   │
+│Load & Process Data   │   │
+└──────────┬───────────┘   │
+           │               │
+           ▼               │
+┌───────────────────────┐  │
+│Role-based Menu Display│  │
+└───────────┬───────────┘  │
+            │              │
+            ▼              │
+┌───────────────────────┐  │
+│Process Menu Selection │  │
+└──────┬───────────┬────┘  │
+       │           │       │
+       ▼           ▼       │
+┌────────────┐ ┌────────┐  │
+│Logout?     │ │Exit?   │  │
+└──────┬─────┘ └───┬────┘  │
+       │Yes         │Yes   │
+       │            │      │
+       ▼            ▼      │
+┌────────────┐ ┌────────┐  │
+│Clear State │ │End     │  │
+│Return to   │ │Program │  │
+│Login       ├─►        │  │
+└─────┬──────┘ └────────┘  │
+      │                    │
+      └────────────────────┘
 ```
 
-## Key Elements in the Flowchart:
+### Detailed Function Flowcharts
 
-1. **Program Initialization**:
-   - Program start
-   - Load account data from [`accounts.txt`](temp_main.cpp )
-   - Display login/register screen
+For detailed flowcharts of key system functions including Login, Product Management, Checkout, and Browse/Buy processes, see the Full System Documentation.
 
-2. **Authentication Flow**:
-   - Login with credential verification
-   - Registration with data collection
-   - Exit program option
+## Advanced Technical Implementation
 
-3. **Role-Based Interface**:
-   - Admin menu with extended privileges
-   - User menu with shopping features
+### Transaction Management
 
-4. **Admin Operations**:
-   - Product management (CRUD)
-   - User management
-   - Report generation
-   - System data operations
+The system implements basic transaction management to ensure data integrity during operations like checkout:
 
-5. **User Operations**:
-   - Browse products
-   - Shopping cart management
-   - Checkout process
-   - View purchase history
+1. **Pre-transaction Validation**
+   - Verifies product availability before checkout
+   - Checks that products still exist in database
+   - Confirms sufficient quantity for purchase
 
-6. **Data Persistence**:
-   - Save operations for products and accounts
-   - Load operations when needed
+2. **Atomic Operations**
+   - Checkout process completes all steps or none
+   - Updates inventory, user history, and global history in sequence
+   - Provides rollback capability if any step fails
 
-7. **Session Management**:
-   - Logout process
-   - Clean state between user sessions
+3. **Audit Preservation**
+   - Every product modification is immediately logged
+   - Complete trail of who changed what and when
+   - Supports administrative oversight and accountability
 
-8. **Program Termination**:
-   - Save final data state
-   - Exit the application
+### Search and Filter Capabilities
 
-To create an actual flowchart, you could use tools like:
-- Lucidchart
-- Draw.io
-- Microsoft Visio
-- SmartDraw
-- Google Drawings
+While primarily menu-driven, the system offers several ways to find products:
 
-The flowchart should use standard symbols:
-- Rectangles for processes
-- Diamonds for decisions
-- Parallelograms for input/output
-- Rounded rectangles for start/end points
-- Arrows for flow direction
+1. **Direct ID Lookup**
+   - Products can be accessed by their unique ID
+   - Fast retrieval for updates or purchases
 
-This would provide a clear visual representation of your e-commerce system's workflow for documentation or presentation purposes.
+2. **Complete Catalog Browsing**
+   - Chronological listing of all products
+   - Visible stock levels for purchase decisions
 
+3. **Audit Trail Filtering** (Admin only)
+   - View modifications by product ID
+   - Track history of specific high-value items
 
-# Detailed Flowcharts for Key E-Commerce System Functions
+### Security Implementation
 
-Here are detailed flowcharts for four critical functions in your e-commerce system:
+The system implements several security measures:
 
-## 1. Login Function Flowchart
-
-```
-┌─────────────────┐
-│ login() START   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────┐
-│ Display Login Header│
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│ Get username input  │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│ Get password input  │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│ Initialize account  │◄───────────┐
-│ search              │            │
-└─────────┬───────────┘            │
-          │                        │
-          ▼                        │
-    ┌───────────────┐         ┌────────────────┐
-    │ More accounts │    Yes  │ Get next       │
-    │ to check?     ├─────────► account        │
-    └───────┬───────┘         └────────┬───────┘
-            │ No                       │
-            │                          │
-            ▼                          │
-┌───────────────────┐                  │
-│ Display error     │                  │
-│ message           │                  │
-└─────────┬─────────┘                  │
-          │                            │
-          ▼                            │
-┌─────────────────────┐                │
-│ Return false        │                │
-└─────────┬───────────┘                │
-          │                            │
-          │                            │
-          │                ┌───────────▼────────┐
-          │                │ Username and       │
-          │                │ password match?    │
-          │                └───────────┬────────┘
-          │                            │ Yes
-          │                            │
-          │                            ▼
-          │                ┌────────────────────┐
-          │                │ Set currentUserRole│
-          │                └──────────┬─────────┘
-          │                           │
-          │                           ▼
-          │                ┌────────────────────┐
-          │                │ Set currentUsername│
-          │                └──────────┬─────────┘
-          │                           │
-          │                           ▼
-          │                ┌────────────────────┐
-          │                │ Display success    │
-          │                │ message            │
-          │                └──────────┬─────────┘
-          │                           │
-          │                           ▼
-          │                ┌────────────────────┐
-          │                │ Return true        │
-          └────────────────┤                    │
-                           └────────────────────┘
-```
-
-## 2. Product Management Flowchart
-
-```
-┌────────────────────┐
-│productManagement() │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────────┐
-│Display Product Menu    │◄─────────────────────┐
-└─────────┬──────────────┘                      │
-          │                                     │
-          ▼                                     │
-┌────────────────────────┐                      │
-│Get user choice         │                      │
-└─────────┬──────────────┘                      │
-          │                                     │
-          ▼                                     │
-      ┌───────┐                                 │
-      │Choice?│                                 │
-      └┬─┬─┬─┬┬┬┐                              │
-       │ │ │ │││└─┐                            │
-       │ │ │ │││  │                            │
-       ▼ │ │ │││  ▼                            │
-┌──────────┐││││┌─────────┐                    │
-│Add (1)   │││││Exit (6)  │                    │
-└────┬─────┘││││└────┬────┘                    │
-     │      ││││     │                         │
-     ▼      ││││     ▼                         │
-┌──────────┐││││┌─────────────┐                │
-│Get ID,   │││││Display exit  │                │
-│Name,Price│││││message       │                │
-└────┬─────┘││││└──────┬──────┘                │
-     │      ││││       │                       │
-     ▼      ││││       │                       │
-┌──────────┐││││       │                       │
-│Check if  │││││       │                       │
-│ID exists │││││       │                       │
-└────┬─────┘││││       │                       │
-     │      ││││       │                       │
-     ▼      ││││       │                       │
-┌──────────┐││││       │                       │
-│Add audit │││││       │                       │
-│info      │││││       │                       │
-└────┬─────┘││││       │                       │
-     │      ││││       │                       │
-     ▼      ││││       │                       │
-┌──────────┐││││       │                       │
-│Save to   │││││       │                       │
-│products  │││││       │                       │
-└────┬─────┘││││       │                       │
-     │      ││││       │                       │
-     ▼      ││││       │                       │
-┌──────────┐││││       │                       │
-│Log to    │││││       │                       │
-│audit file│││││       │                       │
-└────┬─────┘││││       │                       │
-     │      ││││       │                       │
-     │      ││││       ▼                       │
-     │      ││││┌─────────────┐                │
-     │      │││││Return to    │                │
-     │      │││││main         │                │
-     │      ││││└─────────────┘                │
-     │      ▼│││                               │
-     │ ┌──────┐││                              │
-     │ │View  │││                              │
-     │ │(2)   │││                              │
-     │ └───┬──┘││                              │
-     │     │   ││                              │
-     │     ▼   ││                              │
-     │ ┌──────┐││                              │
-     └─►Display││                              │
-       │All   │││                              │
-       │Items │││                              │
-       └───┬──┘││                              │
-           │   ││                              │
-           └───┘││                             │
-                ▼│                             │
-           ┌──────┐│                           │
-           │Update││                           │
-           │(3)   ││                           │
-           └───┬──┘│                           │
-               │   │                           │
-               ▼   │                           │
-           ┌──────┐│                           │
-           │Get ID││                           │
-           │to    ││                           │
-           │update││                           │
-           └───┬──┘│                           │
-               │   │                           │
-               ▼   │                           │
-           ┌──────┐│                           │
-           │Get   ││                           │
-           │new   ││                           │
-           │values││                           │
-           └───┬──┘│                           │
-               │   │                           │
-               ▼   │                           │
-           ┌──────┐│                           │
-           │Update││                           │
-           │audit ││                           │
-           │data  ││                           │
-           └───┬──┘│                           │
-               │   │                           │
-               ▼   │                           │
-           ┌──────┐│                           │
-           │Save  ││                           │
-           │and   ││                           │
-           │log   ││                           │
-           └───┬──┘│                           │
-               │   │                           │
-               └───┘│                           │
-                    ▼                           │
-               ┌──────┐                         │
-               │Delete│                         │
-               │(4)   │                         │
-               └───┬──┘                         │
-                   │                            │
-                   ▼                            │
-               ┌──────┐                         │
-               │Get ID│                         │
-               │to    │                         │
-               │delete│                         │
-               └───┬──┘                         │
-                   │                            │
-                   ▼                            │
-               ┌──────┐                         │
-               │Log   │                         │
-               │action│                         │
-               │first │                         │
-               └───┬──┘                         │
-                   │                            │
-                   ▼                            │
-               ┌──────┐                         │
-               │Remove│                         │
-               │from  │                         │
-               │list  │                         │
-               └───┬──┘                         │
-                   │                            │
-                   └────────────────────────────┘
-```
-
-## 3. Checkout Function Flowchart
-
-```
-┌────────────────┐
-│checkout() START│
-└───────┬────────┘
-        │
-        ▼
-┌───────────────┐     ┌───────────────┐
-│ Is cart empty?├─Yes─► Display error │
-└───────┬───────┘     │ message       │
-        │No           └───────┬───────┘
-        │                     │
-        ▼                     │
-┌───────────────┐             │
-│Initialize     │             │
-│total & details│             │
-└───────┬───────┘             │
-        │                     │
-        ▼                     │
-┌───────────────┐             │
-│Open invoice   │             │
-│file           │             │
-└───────┬───────┘             │
-        │                     │
-        ▼                     │
-┌───────────────────────┐     │
-│Write invoice header   │     │
-└───────┬───────────────┘     │
-        │                     │
-        ▼                     │
-┌───────────────┐             │
-│Display invoice│             │
-│header         │             │
-└───────┬───────┘             │
-        │                     │
-        ▼                     │
-┌────────────────────┐        │
-│For each cart item: │        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│Calculate item total│        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│Display item details│        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│Write to invoice    │        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│Add to order details│        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│Add to total        │        │
-└────────┬───────────┘        │
-         │                    │
-         ▼                    │
-┌────────────────────┐        │
-│More items?         │        │
-└────┬───────────┬───┘        │
-     │No         │Yes         │
-     │           └────────────┘
-     ▼
-┌────────────────────┐
-│Display total       │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Write total to file │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Close invoice file  │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Open history file   │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Write purchase info │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Close history file  │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Add order to user's │
-│history             │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Save accounts data  │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Clear shopping cart │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Display success msg │
-└────────┬───────────┘
-         │
-         ▼
-┌────────────────────┐
-│Return              │
-└────────────────────┘
-```
-
-## 4. browseAndBuy Function Flowchart
-
-```
-┌──────────────────┐
-│browseAndBuy()    │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────────┐      ┌───────────────────┐
-│ Are products empty?  ├─Yes──► Display error msg │
-└────────┬─────────────┘      └─────────┬─────────┘
-         │No                            │
-         │                              │
-         ▼                              │
-┌──────────────────────┐                │
-│Display products list │                │
-└────────┬─────────────┘                │
-         │                              │
-         ▼                              │
-┌──────────────────────┐                │
-│Prompt for product ID │                │
-└────────┬─────────────┘                │
-         │                              │
-         ▼                              │
-┌──────────────────────┐                │
-│Get product ID input  │                │
-└────────┬─────────────┘                │
-         │                              │
-         ▼                              │
-┌───────────────────────┐               │
-│ID = 0? (user cancel)  ├─Yes──────────┐│
-└────────┬──────────────┘              ││
-         │No                           ││
-         ▼                             ││
-┌──────────────────────┐               ││
-│Search for product    │               ││
-└────────┬─────────────┘               ││
-         │                             ││
-         ▼                             ││
-┌──────────────────────┐     ┌─────────▼────────┐
-│Product found?        ├─No──► Display not found │
-└────────┬─────────────┘     │ message          │
-         │Yes                └──────────────────┘
-         │
-         ▼
-┌──────────────────────┐
-│Prompt for quantity   │
-└────────┬─────────────┘
-         │
-         ▼
-┌──────────────────────┐
-│Get quantity input    │
-└────────┬─────────────┘
-         │
-         ▼
-┌──────────────────────┐
-│Check if product      │
-│already in cart       │
-└────────┬─────────────┘
-         │
-         ▼
-     ┌──────────┐           ┌──────────────────┐
-     │In cart?  ├─Yes──────►│Increase existing │
-     └────┬─────┘           │quantity          │
-          │No               └────────┬─────────┘
-          │                          │
-          ▼                          │
-┌─────────────────────┐              │
-│Add new item to cart │              │
-└─────────┬───────────┘              │
-          │                          │
-          │                          │
-          ▼                          │
-┌─────────────────────┐              │
-│Display confirmation │◄─────────────┘
-│message              │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│Return               │
-└─────────────────────┘
-```
-
-These flowcharts illustrate the logical structure and decision paths of four key functions in your e-commerce system. They show how data flows through each function, what decisions are made, and how the various operations (like product management, browsing, and checkout) are implemented.
-
-The diagrams demonstrate how your code handles edge cases (like empty carts or products not found), implements role-based security, maintains data integrity through proper saving procedures, and provides user feedback at various points throughout the process.
-
-
-
-# E-Commerce System Project Results
-
-Congratulations! Your e-commerce system is complete with all the key components implemented and working properly. Here's a summary of what you've accomplished:
-
-## Implemented Features
-
-### User Management
-- Multi-user system with role-based access control
-- User registration with detailed profile information
-- Secure login system with different permissions for admins and users
-- User profile viewing and management
-- Order history tracking for users
-
-### Product Management (Admin)
-- Complete CRUD operations (Create, Read, Update, Delete)
-- Detailed audit trail tracking product changes
-- Product browsing interface
-
-### Shopping Experience
-- Product browsing and adding to cart
-- Shopping cart management (add, view, remove items)
-- Checkout process with invoice generation
-- Persistent purchase history
-
-### Data Persistence
-- File I/O for all system data
-- Account information storage
-- Product catalog with audit information
-- Purchase history tracking
-- Invoice generation
-
-## Technical Achievements
-
-1. **Proper Data Structures**:
-   - Used `vector<T>` for dynamic collection management
-   - Created custom structs (Account, Product, CartItem)
-   - Implemented appropriate data types for each field
-
-2. **File Management**:
-   - CSV format for structured data
-   - Proper error handling for file operations
-   - Data persistence across program sessions
-
-3. **User Experience**:
-   - Clean console-based menus
-   - Role-based interface customization
-   - Meaningful feedback messages
-   - Error handling for invalid inputs
-
-4. **Security Features**:
+1. **Authentication**
+   - Username/password validation
    - Role-based access control
-   - Authentication system
-   - Protected admin functions
 
-5. **Code Structure**:
-   - Organized function implementations
-   - Clear separation of concerns
-   - Consistent naming conventions
-   - Comprehensive commenting
+2. **Authorization**
+   - Function-level permission checking
+   - Prevents unauthorized access to admin functions
 
-## Documentation
+3. **Session Management**
+   - Active user tracking
+   - Proper session cleanup on logout
 
-You've also created thorough documentation in your README.md that explains:
-- How to compile and run the program
-- System features and capabilities
-- User guides for both admins and customers
-- Technical implementation details
-- File structures and data persistence
+4. **Input Validation**
+   - Checks for valid product IDs and quantities
+   - Prevents negative quantities or prices
+   - Guards against common input errors
 
-## Testing Results
+## Challenges & Experiences
 
-Your system handles all the expected use cases:
-- Users can register, log in, browse products, manage cart, checkout, and view history
-- Admins can manage products, view all users, generate reports, etc.
-- The system properly validates inputs and handles edge cases
-- Data is correctly persisted between sessions
+### Technical Challenges Encountered
 
-## Next Steps
+1. **File I/O Handling**
+   - **Challenge**: Implementing robust file operations that could handle missing files, malformed data, and backward compatibility.
+   - **Solution**: Added comprehensive error checking and fallback mechanisms, such as defaulting to predefined accounts when the accounts file is missing and handling different file formats.
 
-If you wanted to extend this project further, you might consider:
-1. Password encryption
-2. More advanced reporting features
-3. Product categories and search
-4. Inventory management
-5. Payment processing simulation
-6. A graphical user interface
+2. **User Session Management**
+   - **Challenge**: Maintaining proper state between user sessions and preventing data leakage between users.
+   - **Solution**: Added proper logout procedures that clear the cart and user state variables, ensuring each user only sees their own data.
 
-Overall, this is a robust, well-structured e-commerce system implementation that demonstrates good programming practices and meets all the project requirements.
+3. **Role-Based Access Control**
+   - **Challenge**: Ensuring proper separation between admin and user functions.
+   - **Solution**: Implemented distinct menu systems and access checks based on the `currentUserRole` variable.
 
+4. **Data Persistence Across Sessions**
+   - **Challenge**: Ensuring that all user actions (purchases, product changes) were properly saved.
+   - **Solution**: Implemented immediate saving after critical operations and created audit trails for product modifications.
 
-# Challenges & Experiences - E-Commerce System Development
+5. **Console-Based UI Limitations**
+   - **Challenge**: Creating an intuitive interface within the constraints of a console application.
+   - **Solution**: Used clear sections, consistent formatting, and confirmation messages to guide users through the system.
 
-## Technical Challenges Encountered
+### Learning Experiences
 
-### 1. File I/O Handling
-- **Challenge**: Implementing robust file operations that could handle missing files, malformed data, and backward compatibility.
-- **Solution**: Added comprehensive error checking and fallback mechanisms, such as defaulting to predefined accounts when the accounts file is missing and handling different file formats.
+1. **Data Structure Design**
+   - Learned the importance of designing flexible data structures (like the Account and Product structs) that can evolve as requirements change
+   - Gained experience with using vector containers for dynamic collections
 
-### 2. User Session Management
-- **Challenge**: Maintaining proper state between user sessions and preventing data leakage between users.
-- **Solution**: Added proper logout procedures that clear the cart and user state variables, ensuring each user only sees their own data.
+2. **File Format Design**
+   - Developed practical knowledge about CSV and other delimited formats
+   - Learned techniques for storing hierarchical data (like order history) in flat file formats
 
-### 3. Role-Based Access Control
-- **Challenge**: Ensuring proper separation between admin and user functions.
-- **Solution**: Implemented distinct menu systems and access checks based on the `currentUserRole` variable.
+3. **Security Considerations**
+   - Developed awareness of role-based security principles
+   - Learned about proper input validation to prevent system manipulation
 
-### 4. Data Persistence Across Sessions
-- **Challenge**: Ensuring that all user actions (purchases, product changes) were properly saved.
-- **Solution**: Implemented immediate saving after critical operations and created audit trails for product modifications.
+4. **User Experience Design**
+   - Gained insights into creating intuitive menu flows even in console applications
+   - Learned the importance of providing clear feedback for user actions
 
-### 5. Console-Based UI Limitations
-- **Challenge**: Creating an intuitive interface within the constraints of a console application.
-- **Solution**: Used clear sections, consistent formatting, and confirmation messages to guide users through the system.
+5. **Software Architecture**
+   - Developed skills in organizing code into logical functional units
+   - Learned to maintain separation of concerns between different system components
 
-## Learning Experiences
+## References & Screenshots
 
-### 1. Data Structure Design
-- Learned the importance of designing flexible data structures (like the Account and Product structs) that can evolve as requirements change
-- Gained experience with using vector containers for dynamic collections
+### References
 
-### 2. File Format Design
-- Developed practical knowledge about CSV and other delimited formats
-- Learned techniques for storing hierarchical data (like order history) in flat file formats
+For additional resources on concepts used in this project:
 
-### 3. Security Considerations
-- Developed awareness of role-based security principles
-- Learned about proper input validation to prevent system manipulation
+1. **C++ Programming**
+   - Stroustrup, B. (2013). *The C++ Programming Language (4th Edition)*
+   - C++ Reference: [https://en.cppreference.com/](https://en.cppreference.com/)
 
-### 4. User Experience Design
-- Gained insights into creating intuitive menu flows even in console applications
-- Learned the importance of providing clear feedback for user actions
+2. **File I/O and Data Persistence**
+   - Horton, I. (2018). *Beginning C++17: From Novice to Professional*
 
-### 5. Software Architecture
-- Developed skills in organizing code into logical functional units
-- Learned to maintain separation of concerns between different system components
+3. **Console Interface Design**
+   - Terminal-based UIs: [https://github.com/topics/terminal-ui](https://github.com/topics/terminal-ui)
 
-## Personal Growth
-
-The development of this e-commerce system provided valuable experience in:
-- Requirements analysis and system design
-- Creating maintainable code with proper documentation
-- Handling edge cases and error conditions
-- Implementing data persistence mechanisms
-- Creating audit trails for accountability
-- Building user-friendly interfaces
-
-The project successfully demonstrates competence in applying core programming concepts (arrays, structures, file I/O, and menu-driven programming) to solve a real-world problem, resulting in a functional e-commerce system with separate interfaces for administrators and customers.
-
-
-
-# References & Screenshots
-
-## References
-
-For your E-Commerce System project, the following resources and references can be valuable:
-
-### C++ Programming References
-1. Stroustrup, B. (2013). *The C++ Programming Language (4th Edition)*. Addison-Wesley Professional.
-2. Lippman, S., Lajoie, J., & Moo, B. (2012). *C++ Primer (5th Edition)*. Addison-Wesley Professional.
-3. C++ Reference: [https://en.cppreference.com/](https://en.cppreference.com/)
-4. Standard Template Library Tutorial: [http://www.cplusplus.com/reference/stl/](http://www.cplusplus.com/reference/stl/)
-
-### File I/O and Data Persistence
-1. Horton, I. (2018). *Beginning C++17: From Novice to Professional*. Apress. (Chapters on File I/O)
-2. Data Serialization Techniques: [https://isocpp.org/wiki/faq/serialization](https://isocpp.org/wiki/faq/serialization)
-
-### Console Interface Design
-1. Terminal-based User Interfaces: [https://github.com/topics/terminal-ui](https://github.com/topics/terminal-ui)
-2. Console Interface Design Principles: [https://www.nngroup.com/articles/command-line-usability/](https://www.nngroup.com/articles/command-line-usability/)
-
-## Screenshots
+### Screenshots
 
 Below are screenshots of different parts of the E-Commerce System application during execution:
 
-### 1. Login Screen
+#### Login Screen
 ```
 ===============================================
            E-COMMERCE SYSTEM LOGIN
@@ -1183,7 +578,7 @@ Password: admin123
 ✅ Login successful! Role: admin
 ```
 
-### 2. Admin Menu
+#### Admin Menu
 ```
 ===============================================
            WELCOME TO E-COMMERCE SYSTEM
@@ -1202,7 +597,7 @@ Current user: admin (Administrator)
 Enter your choice (1-9): 1
 ```
 
-### 3. Product Management
+#### Product Management
 ```
 --- PRODUCT MANAGEMENT ---
 1. Add New Product
@@ -1214,102 +609,13 @@ Enter your choice (1-9): 1
 Enter your choice (1-6): 2
 
 --- PRODUCT LIST ---
-ID: 1, Name: Laptop, Price: $999.99
-  Created by: admin on 2023-01-01
-  Last modified by: admin on 2023-04-15
+ID: 1, Name: iPad Pro, Price: $899.00, In Stock: 5
+  Created by: admin on 2025-05-10 00:55:27
+  Last modified by: admin on 2025-05-10 15:42:37
 ------------------------
-ID: 2, Name: Wireless Mouse, Price: $25.99
-  Created by: admin on 2023-01-01
-------------------------
-ID: 3, Name: Bluetooth Headphones, Price: $85.5
-  Created by: user on 2023-03-10
-  Last modified by: admin on 2023-04-20
+ID: 2, Name: iPhone 16e, Price: $1200.00, In Stock: 15
+  Created by: admin on 2025-05-10 00:56:13
 ------------------------
 ```
 
-### 4. User Shopping Cart
-```
---- SHOPPING CART ---
-ID: 1, Name: Laptop, Quantity: 1, Total: $999.99
-ID: 3, Name: Bluetooth Headphones, Quantity: 2, Total: $171.00
-Cart Total: $1170.99
-1. Remove item from cart
-2. Back to main menu
-Enter your choice: 
-```
-
-### 5. Checkout and Invoice
-```
---- INVOICE ---
-Laptop x1 = $999.99
-Bluetooth Headphones x2 = $171.00
-Total Amount: $1170.99
-Invoice saved to invoice.txt.
-Checkout complete. Cart is now empty.
-```
-
-### 6. User Profile
-```
---- USER PROFILE ---
-Username: user
-Full Name: Regular User
-Email: user@example.com
-Phone: 0987654321
-Address: User Address
-Join Date: 2023-01-01
-Total Orders: 3
-```
-
-### 7. Product Audit Trail
-```
---- PRODUCT AUDIT TRAIL ---
-2023-01-01 - admin created product ID: 1, Name: Laptop, Price: $999.99
-2023-01-01 - admin created product ID: 2, Name: Mouse, Price: $19.99
-2023-03-10 - user created product ID: 3, Name: Headphones, Price: $79.99
-2023-04-15 - admin updated product ID: 1, Name: Laptop -> Gaming Laptop, Price: $999.99 -> $1499.99
-2023-04-20 - admin updated product ID: 3, Name: Headphones -> Bluetooth Headphones, Price: $79.99 -> $85.50
-2023-05-05 - admin deleted product ID: 2, Name: Mouse, Price: $19.99
-```
-
-### 8. Account Registration
-```
-===== REGISTER =====
-Choose a username: newuser
-Choose a password: pass123
-Enter your full name: New Test User
-Enter your email: new@example.com
-Enter your phone number: 5555555555
-Enter your address: 123 New Street, City
-✅ Registration successful! You can now log in.
-```
-
-### 9. Admin User List View
-```
---- USER LIST ---
-Username: admin
-Role: admin
-Full Name: Admin User
-Email: admin@example.com
-Phone: 1234567890
-Join Date: 2023-01-01
-Total Orders: 0
-------------------------
-Username: user
-Role: user
-Full Name: Regular User
-Email: user@example.com
-Phone: 0987654321
-Join Date: 2023-01-01
-Total Orders: 3
-------------------------
-Username: newuser
-Role: user
-Full Name: New Test User
-Email: new@example.com
-Phone: 5555555555
-Join Date: 2023-05-09
-Total Orders: 0
-------------------------
-```
-
-These screenshots demonstrate the key features and user interfaces of your E-Commerce System, highlighting the role-based access control, product management capabilities, shopping experience, and user profile management.
+For more screenshots and implementation details, refer to the full technical documentation.
