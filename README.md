@@ -1,8 +1,8 @@
-# E-Commerce System
+# 🛒 E-Commerce System
 
 A comprehensive console-based e-commerce application with dual interfaces for administrators and customers. This system implements product management, shopping cart functionality, user authentication, and purchase tracking.
 
-## Table of Contents
+## 📋 Table of Contents
 - How to Compile and Run
 - System Features
 - User Guide
@@ -17,7 +17,7 @@ A comprehensive console-based e-commerce application with dual interfaces for ad
 - Challenges & Experiences
 - References & Screenshots
 
-## How to Compile and Run
+## 🔧 How to Compile and Run
 
 ### Prerequisites
 - C++ compiler (g++ or equivalent)
@@ -26,10 +26,10 @@ A comprehensive console-based e-commerce application with dual interfaces for ad
 ### Compilation Steps
 ```bash
 # Copy main file to standard lowercase extension (macOS case-sensitivity workaround)
-cp main.Cpp temp_main.cpp
+cp main.Cpp [temp_main.cpp](http://_vscodecontentref_/0)
 
 # Compile the program
-g++ -std=c++11 -o ecommerce temp_main.cpp
+g++ -std=c++11 -o ecommerce [temp_main.cpp](http://_vscodecontentref_/1)
 
 # Check if compilation was successful
 ls -la ecommerce
@@ -71,41 +71,41 @@ The system comes with two pre-configured accounts:
 - **Administrator**: Username: `admin`, Password: `admin123`
 - **Customer**: Username: `user`, Password: `user123`
 
-### Customer Interface
+### 👤 Customer Interface
 
 When logged in as a regular user, you'll have access to these options:
 
-1. **Browse & Buy Products**
+1. **🔍 Browse & Buy Products**
    - View all available products with ID, name, and price
    - See current stock quantity for each product
    - Add products to your cart with specified quantities
    - Products remain in cart until checkout or logout
 
-2. **View Shopping Cart**
+2. **🛒 View Shopping Cart**
    - See all items in cart with quantities and subtotals
    - View cart total amount
    - Option to remove items from cart
 
-3. **Checkout & Generate Invoice**
+3. **💳 Checkout & Generate Invoice**
    - Complete your purchase
    - Generate invoice (saved to `invoice.txt`)
    - Record purchase in history
    - Clear cart after successful checkout
    - Automatically update product inventory
 
-4. **View Purchase History**
+4. **📜 View Purchase History**
    - See all past purchases
    - Details include date, items, quantities, and totals
 
-5. **View Profile**
+5. **👤 View Profile**
    - View your account information
    - See your join date and order statistics
 
-6. **Logout**
+6. **🚪 Logout**
    - Return to login screen
    - Cart contents are cleared on logout
 
-7. **Exit Program**
+7. **❌ Exit Program**
    - Close the application entirely
 
 ### Administrator Interface
@@ -151,7 +151,7 @@ When logged in as an administrator, you'll have access to additional management 
 
 ## Technical Implementation
 
-### Data Structures
+### 🏗️ Data Structures
 
 The system uses three main data structures designed to efficiently store and manage different aspects of the e-commerce system:
 
@@ -383,9 +383,9 @@ The system performs the following file operations:
    - `getCurrentDateTime()`: Get formatted current date/time for records
    - Various menu handling and navigation functions
 
-## System Flowchart
+## 📊 System Flowchart
 
-### Overall Program Flow
+### 🔄 Overall Program Flow
 
 ```mermaid
 flowchart TD
@@ -510,7 +510,7 @@ This will add three interactive Mermaid flowcharts to your README:
 
 These diagrams will render automatically on GitHub, providing visual representation of your program's logic flow. Mermaid diagrams are supported by GitHub and many other Markdown renderers.
 
-## Advanced Technical Implementation
+## 🚀 Advanced Technical Implementation
 
 ### Transaction Management
 
@@ -568,7 +568,7 @@ The system implements several security measures:
    - Prevents negative quantities or prices
    - Guards against common input errors
 
-## Challenges & Experiences
+## 🧩 Challenges & Experiences
 
 ### Technical Challenges Encountered
 
@@ -614,7 +614,7 @@ The system implements several security measures:
    - Developed skills in organizing code into logical functional units
    - Learned to maintain separation of concerns between different system components
 
-## References & Screenshots
+## 📚 References & Screenshots
 
 ### References
 
@@ -691,3 +691,8 @@ ID: 2, Name: iPhone 16e, Price: $1200.00, In Stock: 15
 ```
 
 For more screenshots and implementation details, refer to the full technical documentation.
+Author
+Phirun
+
+License
+This project is available for educational purposes.
