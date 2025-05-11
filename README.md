@@ -691,8 +691,11 @@ ID: 2, Name: iPhone 16e, Price: $1200.00, In Stock: 15
 ```
 
 For more screenshots and implementation details, refer to the full technical documentation.
-Author
+
+## 👨‍💻 Author
+
 Phirun
 
-License
+## 📄 License
+
 This project is available for educational purposes.
