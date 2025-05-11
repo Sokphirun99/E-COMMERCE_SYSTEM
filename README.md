@@ -385,58 +385,130 @@ The system performs the following file operations:
 
 ## System Flowchart
 
-### Main Program Flow
+### Overall Program Flow
 
+```mermaid
+flowchart TD
+    A[Start Program] --> B[Initialize System]
+    B --> C[Load Accounts]
+    C --> D{Authentication Loop}
+    
+    D -->|1| E[Login]
+    D -->|2| F[Register]
+    D -->|3| G[Exit Program]
+    
+    E --> H{Valid Credentials?}
+    H -->|No| D
+    
+    F --> I[Create New Account]
+    I --> D
+    
+    H -->|Yes| J[Load User Data]
+    J --> K{Role-based Menu}
+    
+    K -->|Admin| L[Admin Menu]
+    K -->|User| M[Customer Menu]
+    
+    L -->|1| N[Product Management]
+    L -->|2| O[Browse Products]
+    L -->|3| P[View All Orders]
+    L -->|4| Q[Generate Reports]
+    L -->|5| R[View All Users]
+    L -->|6| S[Save Data]
+    L -->|7| T[Load Data]
+    L -->|8| U[Logout]
+    L -->|9| V[Exit]
+    
+    M -->|1| O
+    M -->|2| W[View Shopping Cart]
+    M -->|3| X[Checkout]
+    M -->|4| Y[View Purchase History]
+    M -->|5| Z[View Profile]
+    M -->|6| U
+    M -->|7| V
+    
+    N --> AA[Log Operation]
+    O --> AA
+    P --> AA
+    Q --> AA
+    R --> AA
+    S --> AA
+    T --> AA
+    W --> AA
+    X --> AA
+    Y --> AA
+    Z --> AA
+    
+    AA --> K
+    
+    U --> D
+    V --> BB[End Program]
+    G --> BB
 ```
-┌─────────────────┐
-│  Program Start  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Load Accounts  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────┐
-│   Login/Register    │◄───┐
-│       Screen        │    │
-└─────────┬───────────┘    │
-          │                │
-          ▼                │
-┌──────────────────────┐   │
-│Load & Process Data   │   │
-└──────────┬───────────┘   │
-           │               │
-           ▼               │
-┌───────────────────────┐  │
-│Role-based Menu Display│  │
-└───────────┬───────────┘  │
-            │              │
-            ▼              │
-┌───────────────────────┐  │
-│Process Menu Selection │  │
-└──────┬───────────┬────┘  │
-       │           │       │
-       ▼           ▼       │
-┌────────────┐ ┌────────┐  │
-│Logout?     │ │Exit?   │  │
-└──────┬─────┘ └───┬────┘  │
-       │Yes         │Yes   │
-       │            │      │
-       ▼            ▼      │
-┌────────────┐ ┌────────┐  │
-│Clear State │ │End     │  │
-│Return to   │ │Program │  │
-│Login       ├─►        │  │
-└─────┬──────┘ └────────┘  │
-      │                    │
-      └────────────────────┘
+
+### Shopping Flow
+
+```mermaid
+flowchart TD
+    A[Browse Products] --> B[Select Product]
+    B --> C[Add to Cart]
+    C --> D{Continue Shopping?}
+    D -->|Yes| A
+    D -->|No| E[View Cart]
+    E --> F{Modify Cart?}
+    F -->|Remove Items| E
+    F -->|No| G{Proceed to Checkout?}
+    G -->|No| K
+    G -->|Yes| H[Validate Inventory]
+    H -->|Success| I[Process Payment]
+    I --> J[Generate Invoice]
+    J --> K[Return to Main Menu]
+    H -->|Failure| L[Show Error]
+    L --> E
 ```
 
-### Detailed Function Flowcharts
+### Product Management Flow
 
-For detailed flowcharts of key system functions including Login, Product Management, Checkout, and Browse/Buy processes, see the Full System Documentation.
+```mermaid
+flowchart TD
+    A[Product Management] --> B{Select Operation}
+    B -->|Add| C[Enter Product Details]
+    C --> D[Validate Input]
+    D -->|Valid| E[Save New Product]
+    D -->|Invalid| C
+    
+    B -->|View| F[Display All Products]
+    
+    B -->|Update| G[Select Product ID]
+    G --> H[Load Product Data]
+    H --> I[Enter New Details]
+    I --> J[Validate Input]
+    J -->|Valid| K[Save Updated Product]
+    J -->|Invalid| I
+    
+    B -->|Delete| L[Select Product ID]
+    L --> M[Confirm Deletion]
+    M -->|Confirmed| N[Remove Product]
+    
+    B -->|Audit| O[View Product History]
+    
+    E --> P[Log Changes]
+    K --> P
+    N --> P
+    
+    P --> Q[Return to Product Menu]
+    F --> Q
+    O --> Q
+    M -->|Canceled| Q
+```
+
+This will add three interactive Mermaid flowcharts to your README:
+
+1. Overall Program Flow - showing the complete program structure with authentication and role-based menus
+2. Shopping Process Flow - detailing the user shopping experience from browsing to checkout
+3. Product Management Flow - showing the CRUD operations for products
+
+These diagrams will render automatically on GitHub, providing visual representation of your program's logic flow. Mermaid diagrams are supported by GitHub and many other Markdown renderers.
 
 ## Advanced Technical Implementation
 
