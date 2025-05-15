@@ -1,0 +1,2 @@
+2025-05-10 00:55:27 - admin created product ID: 1, Name: ipad, Price: $500, Quantity: 10
+2025-05-10 00:56:13 - admin created product ID: 2, Name: iphone 16e, Price: $1200, Quantity: 15
