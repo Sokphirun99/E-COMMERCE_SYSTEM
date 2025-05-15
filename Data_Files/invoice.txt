@@ -1,0 +1,5 @@
+--- INVOICE ---
+Date: 2025-05-11 14:25:42
+Customer: user
+coffee x1 = $2.00
+Total Amount: $2.00

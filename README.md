@@ -1,6 +1,6 @@
 # 🛒 E-Commerce System
 
-A comprehensive console-based e-commerce application with dual interfaces for administrators and customers. This system implements product management, shopping cart functionality, user authentication, and purchase tracking.
+A comprehensive console-based e-commerce application with dual interfaces for administrators and customers. This system implements product management, shopping cart functionality, user authentication, and purchase tracking using object-oriented programming principles.
 
 ## 📋 Table of Contents
 - How to Compile and Run
@@ -9,13 +9,47 @@ A comprehensive console-based e-commerce application with dual interfaces for ad
   - Customer Interface
   - Administrator Interface
 - Technical Implementation
-  - Data Structures
+  - OOP Design
+  - Classes
   - File Management
-  - Core Functions
 - System Flowchart
 - Advanced Technical Implementation
 - Challenges & Experiences
 - References & Screenshots
+
+## 📁 Project Structure
+
+The project is organized into the following directories:
+
+### Source_Files
+Contains all the C++ source code files:
+- Class declarations (.h files)
+- Class implementations (.cpp files)
+- Main application file (main.cpp)
+
+### Build_Files
+Contains all files related to building the project:
+- Makefile
+- Object files (.o)
+- Executable file (ecommerce)
+
+### Data_Files
+Contains all data storage files:
+- accounts.txt - User account information
+- products.txt - Product inventory data
+- history.txt - Purchase history records
+- invoice.txt - Current invoice data
+- product_audit.txt - Log of product changes
+- inventory_log.txt - Log of inventory changes
+- Report files (generated at runtime)
+
+### Documentation
+Contains all documentation for the project:
+- OOP_DESIGN.md - Description of object-oriented design principles used
+- STRUCTURE.md - Overview of project structure and organization
+- class_diagram.md - UML class diagram showing relationships between classes
+- component_diagram.md - Component diagram showing high-level architecture
+- sequence_diagram.md - Sequence diagram showing runtime interactions
 
 ## 🔧 How to Compile and Run
 
@@ -25,14 +59,11 @@ A comprehensive console-based e-commerce application with dual interfaces for ad
 
 ### Compilation Steps
 ```bash
-# Copy main file to standard lowercase extension (macOS case-sensitivity workaround)
-cp main.Cpp [temp_main.cpp](http://_vscodecontentref_/0)
+# Navigate to the Build_Files directory
+cd Build_Files
 
-# Compile the program
-g++ -std=c++11 -o ecommerce [temp_main.cpp](http://_vscodecontentref_/1)
-
-# Check if compilation was successful
-ls -la ecommerce
+# Compile the program using the Makefile
+make
 
 # Run the program
 ./ecommerce

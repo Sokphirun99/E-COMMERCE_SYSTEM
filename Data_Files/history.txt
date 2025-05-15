@@ -1,0 +1,6 @@
+--- New Purchase ---
+Date: 2025-05-11 14:25:42
+User: user
+coffee x1
+Total: $2.00
+

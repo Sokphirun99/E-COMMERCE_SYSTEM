@@ -1,0 +1,4 @@
+2025-05-11 14:19:23 - admin created product ID: 123, Name: Phirun, Price: $2000, Quantity: 0
+2025-05-11 14:21:29 - admin created product ID: 1, Name: coffee, Price: $2, Quantity: 20
+2025-05-11 14:22:57 - admin updated product ID: 123, Name: Phirun -> Phirun, Price: $2000 -> $3000, Quantity: 0 -> 13
+2025-05-15 10:22:43 - admin added product ID: 124, Name: iphone 15 pro, Price: $1200, Quantity: 10
